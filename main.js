@@ -36,6 +36,12 @@ app.post('/pizzas', (request, response) => {
     response.status(201).json(pizzas)
 })
 
+app.delete('/pizzas/:id', (request, response) => {
+    const pizzasFiltered = pizzas.filter(pizza => pizza.id !== request.params.id)
+    pizzas = [...pizzasFiltered]
+    response.json("Excluída com sucesso!")
+})
+
 app.get('/solicitations', (request, response) => {
     response.json(solicitations)
 })
@@ -72,6 +78,27 @@ app.post('/solicitations', (request, response) => {
       solicitations.push(solicitation)
     
       response.status(201).json(solicitation)
+})
+
+app.patch('/solicitations/:id/done', (request, response) => {
+    const solicitation = solicitations.find(solicitation => solicitation.id === request.params.id)
+
+    if(!solicitation){
+        return response.status(404).json({error: 'Desculpe, não encontramos o pedido.'})
+
+    }
+
+    const newSolicitations = solicitations.map((solicitation) => {
+        if(solicitation.id === request.params.id){
+            solicitation.order = "CONCLUÍDO"
+        }
+        return solicitation
+    })
+
+    solicitations = [...newSolicitations]
+
+    response.json()
+
 })
 
 app.listen(3333, () => {
