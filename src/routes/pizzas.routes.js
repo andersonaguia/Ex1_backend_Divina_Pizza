@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { findMany, create, destroy, update } from '../controllers/pizza.controller.js'
+import { findMany, create, destroy, update } from '../controllers/pizza.controller'
 
 const pizzasRoutes = Router()
 

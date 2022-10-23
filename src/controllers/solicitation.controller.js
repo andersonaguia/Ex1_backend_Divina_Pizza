@@ -1,16 +1,16 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getDataInFile } from '../utils/getDataInFile.js'
+import { readDataInFile } from '../utils/readDataInFile.js'
 import fs from 'fs'
 
 export const findMany = (request, response) => {
     const document_client = request.query.document_client || ""
-    const solicitations = getDataInFile('solicitations.json')
+    const solicitations = readDataInFile('solicitations.json')
     const solicitationsFiltered = solicitations.filter(solicitation => solicitation.document_client?.toLowerCase().includes(document_client.toLowerCase()))
     response.json(solicitationsFiltered)
 }
 
 export const create = (request, response) => {
-    const solicitations = getDataInFile('solicitations.json')
+    const solicitations = readDataInFile('solicitations.json')
     const {
         name_client, 
         document_client,
@@ -38,9 +38,9 @@ export const create = (request, response) => {
       response.status(201).json(solicitation)
 }
 
-export const updateOne = (request, response) => {
+export const updateStatus = (request, response) => {
     const order_status = request.body.order_status
-    const solicitations = getDataInFile('solicitations.json')
+    const solicitations = readDataInFile('solicitations.json')
     const solicitation = solicitations.find(solicitation => solicitation.id === request.params.id)
 
     if(!solicitation){
