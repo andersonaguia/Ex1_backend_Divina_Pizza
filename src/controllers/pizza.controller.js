@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getPizzasInFile } from './../utils/getPizzasInFile.js';
+import { getDataInFile } from '../utils/getDataInFile.js'
 import fs from 'fs'
 
 export const findMany = (request, response) => {
     const nameQuery = request.query.name || ""
-    const pizzas = getPizzasInFile()
+    const pizzas = getDataInFile('pizzas.json')
     const pizzasFiltered = pizzas.filter(pizza => pizza.name?.toLowerCase().includes(nameQuery.toLowerCase()))
     response.json(pizzasFiltered)
 }
@@ -35,14 +35,14 @@ export const create = (request, response) => {
 }
 
 export const destroy = (request, response) => {
-    const pizzas = getPizzasInFile()
+    const pizzas = getDataInFile('pizzas.json')
     const pizzasFiltered = pizzas.filter(pizza => pizza.id !== request.params.id)
     fs.writeFileSync('pizzas.json', JSON.stringify(pizzasFiltered))
     response.json("Excluída com sucesso!")
 }
 
 export function update(request, response) {
-    const pizzas = getPizzasInFile()
+    const pizzas = getDataInFile('pizzas.json')
   
     const updatedPizzas = pizzas.map(pizza => {
       if (pizza.id === request.params.id) {

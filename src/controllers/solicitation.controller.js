@@ -1,16 +1,16 @@
 import { v4 as uuidv4 } from 'uuid'
+import { getDataInFile } from '../utils/getDataInFile.js'
+import fs from 'fs'
 
 export const findMany = (request, response) => {
-    response.json([])
-}
-
-export const findOne = (request, response) => {
-    const { id } = request.params
-    const solicitation = solicitations.find(solicitation => solicitation.id === id)
-    return response.json(solicitation) 
+    const document_client = request.query.document_client || ""
+    const solicitations = getDataInFile('solicitations.json')
+    const solicitationsFiltered = solicitations.filter(solicitation => solicitation.document_client?.toLowerCase().includes(document_client.toLowerCase()))
+    response.json(solicitationsFiltered)
 }
 
 export const create = (request, response) => {
+    const solicitations = getDataInFile('solicitations.json')
     const {
         name_client, 
         document_client,
@@ -33,14 +33,14 @@ export const create = (request, response) => {
         order: "EM PRODUÇÃO"
       }
     
-      solicitations.push(solicitation)
+      fs.writeFileSync('solicitations.json', JSON.stringify([...solicitations, solicitation]))
     
       response.status(201).json(solicitation)
 }
 
 export const updateOne = (request, response) => {
     const order_status = request.body.order_status
-
+    const solicitations = getDataInFile('solicitations.json')
     const solicitation = solicitations.find(solicitation => solicitation.id === request.params.id)
 
     if(!solicitation){
@@ -54,7 +54,7 @@ export const updateOne = (request, response) => {
         return solicitation
     })
 
-    solicitations = [...newSolicitations]
+    fs.writeFileSync('solicitations.json', JSON.stringify(newSolicitations))
 
     response.json(order_status)
 }
