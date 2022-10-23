@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { findMany, create, updateStatus } from '../controllers/solicitation.controller.js'
+import { findMany, create, updateStatus } from '../controllers/solicitation.controller'
 const solicitationsRoutes = Router()
 
 solicitationsRoutes.get('/solicitations', findMany)
